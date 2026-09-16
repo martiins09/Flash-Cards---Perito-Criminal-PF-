@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criminalística — Flashcards e Quiz</title>
+  <style>
+    :root{--bg:#07111f;--panel:#0e1b2d;--panel2:#13243a;--text:#edf5ff;--muted:#9fb1c8;--cyan:#22d3ee;--blue:#3b82f6;--gold:#fbbf24;--green:#34d399;--red:#fb7185;--line:#263b56;--shadow:0 20px 50px #0008}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#123661 0,transparent 35%),linear-gradient(145deg,#050b14,#091525 60%,#07111f);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+    button,input{font:inherit}.app{max-width:1120px;margin:auto;padding:28px 20px 60px}.hero{padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,#11243bcc,#0b1829ee);box-shadow:var(--shadow)}
+    .eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.13em;text-transform:uppercase;font-size:.76rem}.hero h1{font-size:clamp(2rem,5vw,3.6rem);margin:.35rem 0}.hero p{color:var(--muted);max-width:760px;line-height:1.65}.tags,.tabs,.actions,.toolbar,.quiz-actions{display:flex;gap:10px;flex-wrap:wrap}.tag{padding:7px 12px;border-radius:99px;background:#152b45;color:#bed7f5;font-size:.82rem;border:1px solid #284563}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 0}.stat{padding:14px;border-radius:15px;background:#081423;border:1px solid var(--line)}.stat b{display:block;font-size:1.35rem;color:var(--cyan)}.stat small{color:var(--muted)}
+    .tabs{margin:24px 0}.tab,.btn{border:1px solid var(--line);background:#102139;color:var(--text);padding:11px 16px;border-radius:12px;cursor:pointer;font-weight:750}.tab.active,.btn.primary{background:linear-gradient(135deg,var(--blue),#2563eb);border-color:#60a5fa}.btn:hover,.tab:hover{transform:translateY(-1px);filter:brightness(1.12)}.btn.danger{color:#fecdd3;border-color:#7f1d2d}.btn.good{color:#a7f3d0;border-color:#166534}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    section{display:none}.view.active{display:block}.panel{background:#0d1a2bcc;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}.panel h2{margin-top:0}.notice{padding:12px 14px;border-left:4px solid var(--gold);background:#33270655;border-radius:8px;color:#fde68a;margin:14px 0}.muted{color:var(--muted)}
+    .flash-wrap{perspective:1200px;margin:25px auto;max-width:800px}.flashcard{position:relative;min-height:370px;cursor:pointer;transform-style:preserve-3d;transition:transform .55s}.flashcard.flipped{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;padding:28px;display:flex;flex-direction:column;background:linear-gradient(145deg,#173352,#0d1d31);border:1px solid #315577;box-shadow:var(--shadow);overflow:auto}.face.back{transform:rotateY(180deg);background:linear-gradient(145deg,#173f3c,#0c2526);border-color:#287467}.label{color:var(--cyan);font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em}.back .label{color:var(--green)}.card-text{font-size:clamp(1.15rem,2.5vw,1.55rem);line-height:1.55;margin:auto 0}.hint{font-size:.78rem;color:var(--muted);margin-top:auto;padding-top:18px}.counter{text-align:center;color:var(--muted);font-weight:700}.progress{height:7px;background:#13243a;border-radius:99px;overflow:hidden;margin:12px auto;max-width:800px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:.25s}
+    .toolbar{padding:10px;background:#091525;border:1px solid var(--line);border-radius:12px;margin:12px 0}.tool{min-width:38px;padding:7px;background:#172a42;border:1px solid #34506e;color:white;border-radius:8px;cursor:pointer}.editor{min-height:100px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#07121f;line-height:1.55}.edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.edit-box label{display:block;font-weight:800;margin-bottom:7px;color:#bdd5ed}
+    .quiz-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);margin-bottom:10px}.question{font-size:1.22rem;line-height:1.55;font-weight:750;margin:18px 0}.options{display:grid;gap:10px}.option{text-align:left;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:#102139;color:var(--text);cursor:pointer;line-height:1.45}.option:hover{border-color:#4b83b6}.option.selected{border-color:var(--cyan);background:#12334a}.option.correct{border-color:var(--green);background:#0c3a31}.option.wrong{border-color:var(--red);background:#421827}.feedback{display:none;margin-top:16px;padding:15px;border-radius:12px;line-height:1.55}.feedback.show{display:block}.feedback.ok{background:#0b3029;border:1px solid #176b57}.feedback.no{background:#3a1520;border:1px solid #8b2e46}.result{text-align:center;padding:24px}.result .score{font-size:3rem;color:var(--cyan);font-weight:900}.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.legend div{padding:14px;background:#0a1626;border:1px solid var(--line);border-radius:12px}.legend strong{color:var(--gold)}
+    @media(max-width:700px){.stats,.edit-grid,.legend{grid-template-columns:1fr}.app{padding:14px 10px 40px}.hero,.panel{padding:16px}.flashcard{min-height:430px}.actions .btn{flex:1}.quiz-meta{font-size:.85rem}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div class="eyebrow">Preparação para concursos periciais</div><h1>Criminalística</h1>
+    <p>Flashcards e quiz sobre conceitos, evolução histórica, objetivos, princípios e postulados, com foco especial nas pegadinhas recorrentes de prova.</p>
+    <div class="tags"><span class="tag">Conceitos essenciais</span><span class="tag">Pegadinhas CESPE/Cebraspe</span><span class="tag">Revisão ativa</span><span class="tag">Progresso salvo</span></div>
+    <div class="stats"><div class="stat"><b id="totalCards">0</b><small>flashcards</small></div><div class="stat"><b id="totalQuestions">0</b><small>questões</small></div><div class="stat"><b id="bestScore">0%</b><small>melhor resultado</small></div></div>
+  </header>
+  <nav class="tabs"><button class="tab active" data-view="cards">Flashcards</button><button class="tab" data-view="quiz">Quiz</button><button class="tab" data-view="resumo">Pegadinhas-chave</button></nav>
+
+  <section id="cards" class="view active">
+    <div class="panel">
+      <div class="quiz-meta"><span id="cardCategory">Conceito</span><span class="counter" id="cardCounter"></span></div>
+      <div class="progress"><span id="cardProgress"></span></div>
+      <div class="flash-wrap"><article class="flashcard" id="flashcard" tabindex="0" aria-label="Flashcard: clique ou pressione espaço para virar"><div class="face front"><span class="label">Pergunta</span><div class="card-text" id="frontText"></div><div class="hint">Clique ou pressione ESPAÇO para virar</div></div><div class="face back"><span class="label">Resposta</span><div class="card-text" id="backText"></div><div class="hint">Use ← e → para navegar</div></div></article></div>
+      <div class="actions"><button class="btn" id="prevCard">← Anterior</button><button class="btn primary" id="flipCard">Virar carta</button><button class="btn" id="nextCard">Próximo →</button><button class="btn" id="editToggle">✎ Editar</button><button class="btn danger" id="deleteCard">Excluir</button></div>
+      <div id="editorPanel" hidden>
+        <div class="toolbar"><button class="tool" data-cmd="bold"><b>B</b></button><button class="tool" data-cmd="italic"><i>I</i></button><button class="tool" data-cmd="underline"><u>U</u></button><button class="tool" id="addLink">🔗</button><button class="tool" id="addImage">🖼</button></div>
+        <div class="edit-grid"><div class="edit-box"><label>Pergunta</label><div class="editor" id="frontEdit" contenteditable="true"></div></div><div class="edit-box"><label>Resposta</label><div class="editor" id="backEdit" contenteditable="true"></div></div></div>
+        <div class="actions" style="margin-top:12px"><button class="btn good" id="saveCard">Salvar alterações</button><button class="btn" id="cancelEdit">Cancelar</button></div>
+      </div>
+      <div class="actions" style="margin-top:16px"><button class="btn good" id="addCard">+ Novo flashcard</button><button class="btn" id="restoreCards">Restaurar originais</button></div>
+    </div>
+  </section>
+
+  <section id="quiz" class="view"><div class="panel" id="quizPanel"><div class="quiz-meta"><span id="quizCounter"></span><span id="quizScore">Acertos: 0</span></div><div class="progress"><span id="quizProgress"></span></div><div class="question" id="questionText"></div><div class="options" id="options"></div><div class="feedback" id="feedback"></div><div class="quiz-actions" style="margin-top:16px"><button class="btn primary" id="confirmAnswer" disabled>Confirmar resposta</button><button class="btn" id="nextQuestion" hidden>Próxima questão →</button></div></div></section>
+
+  <section id="resumo" class="view"><div class="panel"><h2>Pegadinhas que mais confundem</h2><div class="notice">Desconfie de expressões absolutas como “sempre”, “nunca”, “100% infalível”, “exclusivamente” e “a confissão substitui”. Elas frequentemente tornam o item errado.</div><div class="legend">
+    <div><strong>Criminalística ≠ Criminologia</strong><br><span class="muted">A primeira trabalha com vestígios materiais e prova técnica; a segunda estuda crime, criminoso, vítima e controle social.</span></div>
+    <div><strong>Criminalística ≠ Medicina Legal</strong><br><span class="muted">Em regra didática: vestígios extrínsecos versus intrínsecos/corporais.</span></div>
+    <div><strong>Locard</strong><br><span class="muted">Todo contato deixa uma marca. Ausência de vestígio detectado não prova ausência de contato.</span></div>
+    <div><strong>Kirk / Individualidade</strong><br><span class="muted">Objetos podem ser indistinguíveis, mas não absolutamente idênticos.</span></div>
+    <div><strong>Descrição × Objetividade</strong><br><span class="muted">Descrição: linguagem clara e técnica. Objetividade: resultado não depende da pessoa do perito.</span></div>
+    <div><strong>Meios × Tempo</strong><br><span class="muted">Método/equipamento não muda a verdade do fenômeno; passagem do tempo não altera a verdade científica corretamente registrada.</span></div>
+    <div><strong>Corpo de delito</strong><br><span class="muted">Nos crimes que deixam vestígios, a confissão não supre o exame.</span></div>
+    <div><strong>Laudo pericial</strong><br><span class="muted">Não é infalível e não vincula automaticamente o juiz, que deve fundamentar sua decisão.</span></div>
+  </div></div></section>
+</main>
+<script>
+const originalCards=[
+['Conceito','O que é Criminalística?','Disciplina <b>autônoma</b>, técnico-científica, que estuda e interpreta <b>vestígios materiais</b> relacionados à infração penal, empregando métodos próprios.'],
+['Pegadinha','A Criminalística limita-se a descrever estaticamente os vestígios encontrados?','<b>Não.</b> Ela é dinâmica e interpretativa: analisa interligações, meios e modos de execução do delito.'],
+['Natureza','Por que a Criminalística é considerada autônoma?','Porque possui <b>objeto, métodos, leis e princípios próprios</b>, embora utilize conhecimentos de outras ciências.'],
+['Natureza','Multidisciplinaridade elimina a autonomia da Criminalística?','<b>Não.</b> Ela recebe subsídios da Física, Química, Biologia, Matemática e Engenharia sem perder sua autonomia.'],
+['Distinções','Criminalística x Criminologia: qual a diferença central?','A Criminalística examina vestígios para esclarecer o <b>como e quem</b>. A Criminologia estuda empiricamente crime, criminoso, vítima e controle social.'],
+['Distinções','Criminalística x Medicina Legal: qual a distinção didática?','Criminalística: vestígios <b>extrínsecos</b>, como objetos, armas e locais. Medicina Legal: vestígios <b>intrínsecos/corporais</b>, como lesões e necropsias.'],
+['Autores','Qual foi a contribuição de Hans Gross?','Sistematizou a Criminalística como estudo da <b>fenomenologia do crime</b> e dos métodos práticos de investigação. É reconhecido como seu pai.'],
+['Autores','Que expressão caracteriza o conceito de José Del Picchia?','Reconhecimento e interpretação dos <b>indícios materiais extrínsecos</b>.'],
+['Autores','O que Alberi Espíndula destaca?','A Criminalística como disciplina autônoma, informativa e auxiliar, voltada a vestígios extrínsecos, esclarecimento de delitos e identidade dos envolvidos.'],
+['Autores','O que Eraldo Rabello enfatiza?','O estudo e a interpretação de elementos materiais ligados ao crime, criminoso e vítima para oferecê-los como <b>prova à Justiça</b>.'],
+['História','Quem é considerado o Pai da Criminalística e em que ano publicou sua obra fundamental?','<b>Hans Gross</b>, em <b>1893</b>, com a obra “System der Kriminalistik”.'],
+['História','Quem formulou o Princípio da Troca e fundou laboratório forense em Lyon?','<b>Edmond Locard</b>, em 1910.'],
+['História','Quem é considerado o Pai da Medicina Legal?','<b>Paolo Zachias</b>, autor de “Questões Médico Legais” (1651). Não confundir com Hans Gross.'],
+['História','Quem criou a Toxicologia, precursora da Criminalística?','<b>Mathieu Orfila</b>, em 1840.'],
+['História','O que foi o Bertillonage?','Método <b>antropométrico</b> de identificação criado por Alfonso Bertillon; não se confunde com o sistema datiloscópico.'],
+['Identificação','Quem implantou o sistema datiloscópico na Argentina?','<b>Juan Vucetich</b>, em 1891. O sistema foi instituído no Brasil em 1903.'],
+['Identificação','Qual contribuição é atribuída a William James Herschel?','A conclusão sobre a <b>imutabilidade das impressões digitais</b>, em 1858.'],
+['Objetivos','Quais são os objetivos centrais da Criminalística?','Comprovar <b>materialidade</b>, esclarecer <b>dinâmica</b>, promover <b>identificação</b>, preservar vestígios/custódia e fornecer dados para qualificação do delito.'],
+['Objetivos','O que significa estabelecer a dinâmica do delito?','Verificar os <b>meios e modos</b> de execução, reconstruindo tecnicamente o modus operandi.'],
+['Princípios','Enuncie o Princípio da Observação ou da Troca de Locard.','<b>“Todo contato deixa uma marca.”</b> Uma ação delituosa produz vestígios, ainda que microscópicos ou não detectados.'],
+['Pegadinha','Não encontrar vestígios prova que não houve contato?','<b>Não.</b> Significa apenas que o vestígio não foi detectado/materializado; não autoriza concluir que o contato inexistiu.'],
+['Princípios','O que determina o Princípio da Análise?','A perícia deve seguir o <b>método científico</b>, com coleta metódica de dados e formulação de hipóteses coerentes.'],
+['Princípios','Qual é a ideia central do Princípio da Interpretação/Individualidade de Kirk?','Dois objetos podem ser <b>indistinguíveis, mas nunca idênticos</b>; busca-se individualizar o vestígio.'],
+['Princípios','Quais níveis antecedem a identificação individual?','Os níveis de identificação <b>genérica</b> e <b>específica</b>. A perícia busca alcançar o grau individual.'],
+['Princípios','O que exige o Princípio da Descrição?','Resultados em linguagem <b>técnica, clara, inteligível e juridicamente adequada</b>, com fundamentação científica.'],
+['Princípios','O que assegura o Princípio da Documentação?','O histórico completo do vestígio por meio da <b>cadeia de custódia</b>, da coleta ao descarte.'],
+['Postulados','O que diz o Postulado da Objetividade?','O resultado do laudo é <b>invariante em relação ao perito</b>: mesmo método e mesmo vestígio devem conduzir ao mesmo resultado.'],
+['Postulados','O que diz o Postulado da Independência dos Meios?','A verdade do fenômeno independe do equipamento ou técnica; tecnologia mais moderna pode melhorar rapidez ou precisão, mas não cria outra verdade.'],
+['Postulados','O que diz o Postulado da Independência Temporal?','A verdade científica corretamente registrada é <b>perene</b> e não se altera simplesmente pelo decurso do tempo.'],
+['Pegadinha','Princípio da Descrição e Postulado da Objetividade são sinônimos?','<b>Não.</b> Descrição trata da forma de expressão do resultado; objetividade trata da invariância do resultado em relação ao perito.'],
+['Pegadinha','A confissão supre o exame de corpo de delito?','<b>Não</b>, nos crimes que deixam vestígios. O CPP exige o exame direto ou indireto, não podendo a confissão suprir-lhe a falta.'],
+['Pegadinha','O juiz está obrigatoriamente vinculado ao laudo pericial?','<b>Não.</b> O laudo não é infalível nem vincula automaticamente o juiz, que pode aceitá-lo ou rejeitá-lo mediante fundamentação.'],
+['Pegadinha','O que significa visum et repertum?','<b>“Ver e referir.”</b> Não significa que a Criminalística moderna se limite a uma narrativa estática; ela também interpreta.'],
+['Cadeia de custódia','Qual é a finalidade central da cadeia de custódia?','Preservar a <b>rastreabilidade, autenticidade e integridade</b> do vestígio, registrando seu reconhecimento, coleta, transporte, análise e descarte.'],
+['História','DNA forense e sistemas modernos podem ser atribuídos a Hans Gross?','<b>Não.</b> Isso é anacrônico. O uso forense do DNA surgiu na década de 1980.']
+];
+const questions=[
+{q:'A Criminalística é uma disciplina autônoma, apesar de utilizar conhecimentos de ciências como Física, Química e Biologia.',o:['Certo','Errado'],a:0,e:'A interdisciplinaridade não elimina a autonomia: a Criminalística possui objeto, métodos e princípios próprios.'},
+{q:'A Criminalística moderna restringe-se à descrição estática da forma como os vestígios se apresentam.',o:['Certo','Errado'],a:1,e:'Ela também interpreta as relações entre vestígios e investiga os meios e modos de execução do delito.'},
+{q:'Assinale a associação correta.',o:['Hans Gross — Princípio da Troca','Edmond Locard — Princípio da Troca','Orfila — Bertillonage','Vucetich — antropometria'],a:1,e:'Locard formulou o Princípio da Troca. Gross sistematizou a Criminalística; Orfila liga-se à Toxicologia; Vucetich, à datiloscopia.'},
+{q:'Segundo o Princípio da Troca de Locard, a ausência de vestígio detectável demonstra que não houve contato.',o:['Certo','Errado'],a:1,e:'Não detectar um vestígio não equivale a provar inexistência de contato. O vestígio pode ser microscópico, degradado ou não localizado.'},
+{q:'O postulado segundo o qual o resultado não deve variar conforme a pessoa do perito é o da:',o:['Independência temporal','Objetividade','Documentação','Descrição'],a:1,e:'Objetividade ou invariância do laudo: aplicados os mesmos métodos ao mesmo vestígio, o resultado científico deve ser o mesmo.'},
+{q:'O Princípio da Descrição estabelece principalmente que:',o:['todo contato deixa marca','a verdade independe do equipamento','o laudo deve usar linguagem técnica, clara e adequada','o resultado independe do perito'],a:2,e:'A descrição cuida da comunicação clara e fundamentada do resultado. As demais alternativas remetem a Locard ou aos postulados.'},
+{q:'Criminologia e Criminalística possuem o mesmo objeto, distinguindo-se apenas pelo método.',o:['Certo','Errado'],a:1,e:'A Criminologia estuda crime, criminoso, vítima e controle social; a Criminalística concentra-se nos vestígios materiais e na prova técnica.'},
+{q:'Na distinção didática clássica, os vestígios intrínsecos são objeto prioritário da:',o:['Criminalística','Medicina Legal','Criminologia','Política Criminal'],a:1,e:'A Medicina Legal concentra-se nos vestígios corporais/intrínsecos; a Criminalística, nos extrínsecos.'},
+{q:'O método antropométrico de identificação é atribuído a:',o:['Juan Vucetich','Alfonso Bertillon','William Herschel','Marcelo Malpighi'],a:1,e:'Bertillon criou o Bertillonage. Vucetich relaciona-se ao sistema datiloscópico.'},
+{q:'Hans Gross é reconhecido como Pai da Criminalística por ter:',o:['descoberto o DNA','criado a Toxicologia','sistematizado a disciplina e seus métodos de investigação','formulado o sistema datiloscópico'],a:2,e:'Sua obra de 1893 sistematizou a fenomenologia do crime e os métodos práticos de investigação.'},
+{q:'Nos crimes que deixam vestígios, a confissão do acusado pode substituir o exame de corpo de delito quando for detalhada.',o:['Certo','Errado'],a:1,e:'Pegadinha clássica: a confissão não supre a falta do exame de corpo de delito, direto ou indireto.'},
+{q:'A Criminalística busca, entre outros fins, comprovar a materialidade e esclarecer a dinâmica do fato.',o:['Certo','Errado'],a:0,e:'Materialidade, dinâmica e identificação estão entre seus objetivos centrais.'},
+{q:'A tecnologia mais moderna altera a verdade do fenômeno examinado, razão pela qual laudos antigos perdem automaticamente a validade.',o:['Certo','Errado'],a:1,e:'A assertiva contraria os postulados da independência dos meios e temporal. Nova tecnologia pode ampliar precisão, sem criar outra verdade.'},
+{q:'“Dois objetos podem ser indistinguíveis, mas nunca idênticos” está ligado ao princípio da:',o:['Análise','Interpretação ou individualidade','Documentação','Observação'],a:1,e:'É a máxima associada à individualidade/Kirk e à busca da identificação individual.'},
+{q:'A cadeia de custódia está diretamente associada ao Princípio da:',o:['Documentação','Análise','Interpretação','Autonomia'],a:0,e:'Ela documenta todo o histórico do vestígio, protegendo rastreabilidade, autenticidade e integridade.'},
+{q:'O Princípio da Análise exige a aplicação rigorosa do método científico e a formulação de hipóteses com base nos dados coletados.',o:['Certo','Errado'],a:0,e:'Essa é precisamente a função do princípio da análise.'},
+{q:'Qual alternativa contém apenas objetivos da Criminalística?',o:['Materialidade, dinâmica e identificação','Ressocialização, pena e prevenção geral','Controle social, vitimologia e etiologia criminal','Culpabilidade, tipicidade e ilicitude'],a:0,e:'As outras opções pertencem principalmente à Criminologia, Política Criminal ou teoria jurídica do delito.'},
+{q:'O juiz fica adstrito ao laudo pericial porque a prova científica é infalível.',o:['Certo','Errado'],a:1,e:'Nenhuma técnica é absolutamente infalível, e o juiz pode divergir do laudo mediante decisão fundamentada.'},
+{q:'Paolo Zachias é associado ao título de:',o:['Pai da Criminalística','Pai da Medicina Legal','Criador da Toxicologia','Criador da datiloscopia'],a:1,e:'Não confunda: Zachias — Medicina Legal; Gross — Criminalística; Orfila — Toxicologia.'},
+{q:'A expressão visum et repertum autoriza concluir que a Criminalística é meramente descritiva e não interpretativa.',o:['Certo','Errado'],a:1,e:'Embora signifique “ver e referir”, a Criminalística moderna não se limita à narrativa fria dos achados.'},
+{q:'O sistema datiloscópico de Vucetich foi instituído no Brasil em:',o:['1891','1893','1903','1910'],a:2,e:'1891 marca a implantação na Argentina; 1903, a instituição no Brasil.'},
+{q:'Assinale a alternativa correta sobre identificação pericial.',o:['Deve parar no nível genérico','Busca o grau individual, passando pelos níveis genérico e específico','Objetos indistinguíveis são necessariamente idênticos','Individualização dispensa método científico'],a:1,e:'A busca é pelo grau individual, normalmente precedido pela classificação genérica e específica.'},
+{q:'A quebra da cadeia de custódia é irrelevante se o conteúdo do laudo parecer coerente.',o:['Certo','Errado'],a:1,e:'A quebra pode comprometer a confiabilidade, autenticidade e integridade do vestígio e deve ser avaliada concretamente.'},
+{q:'A finalidade de auxiliar a Justiça retira da Criminalística sua natureza científica autônoma.',o:['Certo','Errado'],a:1,e:'Ser ciência auxiliar da Justiça é uma finalidade, não uma negação de sua autonomia.'},
+{q:'Qual associação está INCORRETA?',o:['Orfila — Toxicologia','Bertillon — antropometria','Locard — princípio da troca','Herschel — criação do sistema Vucetich'],a:3,e:'Herschel estudou a imutabilidade das impressões digitais; o sistema é atribuído a Juan Vucetich.'}
+];
+let cards=JSON.parse(localStorage.getItem('criminalistica_cards')||'null')||structuredClone(originalCards),ci=0,qi=0,score=0,selected=null,answered=false;
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+function saveCards(){localStorage.setItem('criminalistica_cards',JSON.stringify(cards))}
+function renderCard(){if(!cards.length){cards=structuredClone(originalCards);saveCards()}ci=Math.max(0,Math.min(ci,cards.length-1));$('#flashcard').classList.remove('flipped');$('#cardCategory').textContent=cards[ci][0];$('#frontText').innerHTML=cards[ci][1];$('#backText').innerHTML=cards[ci][2];$('#cardCounter').textContent=`${ci+1} de ${cards.length}`;$('#cardProgress').style.width=`${(ci+1)/cards.length*100}%`;$('#totalCards').textContent=cards.length;$('#editorPanel').hidden=true}
+function moveCard(n){ci=(ci+n+cards.length)%cards.length;renderCard()}
+function flip(){if(!$('#editorPanel').hidden)return;$('#flashcard').classList.toggle('flipped')}
+$('#flashcard').onclick=flip;$('#flipCard').onclick=flip;$('#prevCard').onclick=()=>moveCard(-1);$('#nextCard').onclick=()=>moveCard(1);
+$('#editToggle').onclick=()=>{$('#frontEdit').innerHTML=cards[ci][1];$('#backEdit').innerHTML=cards[ci][2];$('#editorPanel').hidden=false};$('#cancelEdit').onclick=()=>$('#editorPanel').hidden=true;
+$('#saveCard').onclick=()=>{cards[ci][1]=$('#frontEdit').innerHTML.trim()||'Nova pergunta';cards[ci][2]=$('#backEdit').innerHTML.trim()||'Nova resposta';saveCards();renderCard()};
+$('#addCard').onclick=()=>{cards.push(['Personalizado','Digite sua pergunta','Digite sua resposta']);ci=cards.length-1;saveCards();renderCard();$('#editToggle').click()};
+$('#deleteCard').onclick=()=>{if(cards.length<=1)return alert('Mantenha ao menos um flashcard.');if(confirm('Excluir este flashcard?')){cards.splice(ci,1);ci=Math.min(ci,cards.length-1);saveCards();renderCard()}};
+$('#restoreCards').onclick=()=>{if(confirm('Restaurar todos os flashcards originais? Suas edições serão apagadas.')){cards=structuredClone(originalCards);ci=0;saveCards();renderCard()}};
+$$('[data-cmd]').forEach(b=>b.onclick=()=>document.execCommand(b.dataset.cmd));$('#addLink').onclick=()=>{const u=prompt('Cole o endereço do link:');if(u)document.execCommand('createLink',false,u)};$('#addImage').onclick=()=>{const u=prompt('Cole o endereço (URL) da imagem:');if(u)document.execCommand('insertImage',false,u)};
+function renderQuiz(){if(qi>=questions.length)return finishQuiz();const q=questions[qi];selected=null;answered=false;$('#quizCounter').textContent=`Questão ${qi+1} de ${questions.length}`;$('#quizScore').textContent=`Acertos: ${score}`;$('#quizProgress').style.width=`${qi/questions.length*100}%`;$('#questionText').textContent=q.q;$('#options').innerHTML=q.o.map((x,i)=>`<button class="option" data-i="${i}"><b>${String.fromCharCode(65+i)}.</b> ${x}</button>`).join('');$('#feedback').className='feedback';$('#feedback').innerHTML='';$('#confirmAnswer').hidden=false;$('#confirmAnswer').disabled=true;$('#nextQuestion').hidden=true;$$('.option').forEach(b=>b.onclick=()=>{if(answered)return;$$('.option').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');selected=+b.dataset.i;$('#confirmAnswer').disabled=false})}
+$('#confirmAnswer').onclick=()=>{if(selected===null||answered)return;answered=true;const q=questions[qi],ok=selected===q.a;if(ok)score++;$$('.option').forEach((b,i)=>{b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===selected)b.classList.add('wrong')});$('#feedback').className=`feedback show ${ok?'ok':'no'}`;$('#feedback').innerHTML=`<b>${ok?'✓ Correto!':'✗ Incorreto.'}</b> ${q.e}`;$('#quizScore').textContent=`Acertos: ${score}`;$('#confirmAnswer').hidden=true;$('#nextQuestion').hidden=false};
+$('#nextQuestion').onclick=()=>{qi++;renderQuiz()};
+function finishQuiz(){const pct=Math.round(score/questions.length*100),best=Math.max(pct,+(localStorage.getItem('criminalistica_best')||0));localStorage.setItem('criminalistica_best',best);$('#bestScore').textContent=best+'%';$('#quizPanel').innerHTML=`<div class="result"><div class="eyebrow">Resultado final</div><div class="score">${pct}%</div><h2>${score} de ${questions.length} acertos</h2><p class="muted">${pct>=80?'Excelente domínio. Revise apenas os erros.':pct>=60?'Bom avanço. Reforce as pegadinhas antes de refazer.':'Volte aos flashcards e consolide os conceitos essenciais.'}</p><button class="btn primary" id="restart">Refazer quiz</button></div>`;$('#restart').onclick=()=>location.reload()}
+$$('.tab').forEach(t=>t.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));$$('.view').forEach(x=>x.classList.remove('active'));t.classList.add('active');$('#'+t.dataset.view).classList.add('active')});
+document.addEventListener('keydown',e=>{const editing=document.activeElement?.isContentEditable||['INPUT','TEXTAREA'].includes(document.activeElement?.tagName);if(editing||!$('#cards').classList.contains('active'))return;if(e.code==='Space'){e.preventDefault();flip()}else if(e.key==='ArrowRight')moveCard(1);else if(e.key==='ArrowLeft')moveCard(-1)});
+$('#totalQuestions').textContent=questions.length;$('#bestScore').textContent=(localStorage.getItem('criminalistica_best')||0)+'%';renderCard();renderQuiz();
+</script>
+</body>
+</html>
